@@ -1,0 +1,32 @@
+import discord
+import asyncio
+
+TOKEN = 'YOUR_DISCORD_BOT_TOKEN'
+
+client = discord.Client()
+
+@client.event
+async def on_ready():
+    print(f'We have logged in as {client.user}')
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+
+    if message.content.startswith('!autotype'):
+        await auto_type(message)
+
+async def auto_type(message):
+    # Tulisan yang ingin ditampilkan
+    typing_text = "Ini adalah contoh auto typing di Discord!"
+
+    # Mengirimkan pesan pertama kali
+    await message.channel.send(typing_text[:1])
+
+    # Mengirim sisa teks dengan delay
+    for char in typing_text[1:]:
+        await asyncio.sleep(0.5)  # Delay sesuai keinginan Anda
+        await message.channel.send(char)
+
+client.run(TOKEN)
